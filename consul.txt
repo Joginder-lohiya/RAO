@@ -1,0 +1,45 @@
+https://linuxthegreat.wordpress.com/2017/09/19/hashicorp-consul-installation-on-centos-7/
+
+
+wget https://releases.hashicorp.com/consul/1.7.2/consul_1.7.2_linux_amd64.zip
+
+unzip consul_1.7.2_linux_amd64.zip
+mv consul /usr/bin
+
+mkdir /opt/consul/data
+
+screen
+
+consul agent -data-dir=/opt/consul/data -bind=10.0.10.6 -server -bootstrap-expect 1 -ui -client 0.0.0.0 
+
+systemctl stop firewalld
+
+iptables --flush
+
+
+
+
+
+FOR tfstate remote backend in OCI
+
+#terraform {
+#   backend "http" {
+#     update_method = "PUT"
+#     address = "https://objectstorage.us-ashburn-1.oraclecloud.com/p/MlZAAs92jjdNIApFUBdvN8PoK2nHwlzvP0DLZW6wiZ4/n/idcwmjmm2wbe/b/STATE/o/terraform.tfstate"
+#}
+#}
+
+make sure that terraform.tfstate file is there on the oci storage.
+
+
+This is for consul setup
+
+terraform {
+   backend "consul" {
+     address = "129.213.157.25:8500"
+     scheme   = "http"
+     path     = "tf/terraform.tfstate"
+     lock     = true
+     gzip     = false
+}
+}
